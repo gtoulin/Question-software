@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../../data/my.css">
+	</head>
+
+	<body>
+		<div class="ourterDiv" id="app">
+			<div class="row">
+				<div class="left mei">
+					<div class="tools">
+						<button class="toolBtn" @click="addTm()" title="添加题目"><b>＋</b></button>
+						<button class="toolBtn" @click="deleteTm()" title="删除题目"><b>－</b></button>
+					</div>
+				</div>
+				<div class="right mei">
+					<div class="tools">
+						<button class="toolBtn" @click="execCommand('bold')" title="加粗"><b>B</b></button>
+						<button class="toolBtn" @click="execCommand('italic')" title="斜体"><I>I</I></button>
+						<button class="toolBtn" @click="execCommand('underline')" title="下划线"><u>U</u></button>
+						<button class="toolBtn" @click="execCommand('superscript')" title="上标">X²</button>
+						<button class="toolBtn" @click="execCommand('subscript')" title="下标">X₂</button>
+						<button class="toolBtn" title="插入图片"><img src="../../../data/1.png" width="18" height="18" style="vertical-align: middle;" @click="uploadClick()"/></button>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="left">
+					<div class="head">
+						{{tkInfo.TMLXSetting[currentTMLX].Name}}
+					</div>
+					<div class="content">
+						<div class="tmk">
+							<div class="item" :class="{select:currentTM==index}" v-for="(item,index) in tkInfo.ml[currentTMLX].tm" @click="changeTM(index)">{{index+1}}</div>
+						</div>
+					</div>
+					<div style="height:20px">&nbsp;</div>
+				</div>
+				<div class="right">
+					<div class="btnBar">
+						<div class="button" :class="{select:currentTMLX==index}" v-for="(item,index) in tkInfo.TMLXSetting" @click="changeTNLX(index)">{{item.Name}}</div>
+					</div>
+					<div class="vLine"></div>
+					<div class="content" style="height: 400px;padding-top: 10px;padding-bottom: 10px;">
+						<div>题干：第{{currentTM+1}}题，</div>
+						<div class="test-textarea whiteBg" contenteditable="true" v-html="tmContent.Tg" @input="editing('Tg',$event)"></div>
+						<div v-if="tmContent.tmlx=='单项选择题'||tmContent.tmlx=='多项选择题'">
+							<div>选项</div>
+							<div class="whiteBg">
+								<div class="row">
+									<div class="xx">A：</div>
+									<div class="test-textarea whiteBg" contenteditable="true" v-html="tmContent.xxA" @input="editing('xxA',$event)"></div>
+								</div>
+								<div class="row">
+									<div class="xx">B：</div>
+									<div class="test-textarea whiteBg" contenteditable="true" v-html="tmContent.xxB" @input="editing('xxB',$event)"></div>
+								</div>
+								<div class="row">
+									<div class="xx">C：</div>
+									<div class="test-textarea whiteBg" contenteditable="true" v-html="tmContent.xxC" @input="editing('xxC',$event)"></div>
+								</div>
+								<div class="row">
+									<div class="xx">D：</div>
+									<div class="test-textarea whiteBg" contenteditable="true" v-html="tmContent.xxD" @input="editing('xxD',$event)"></div>
+								</div>
+							</div>
+						</div>
+						<div v-if="tmContent.tmlx=='单项选择题'||tmContent.tmlx=='多项选择题'||tmContent.tmlx=='填空题'||tmContent.tmlx=='判断题'">答案</div>
+
+						<div class="test-textarea whiteBg" v-if="tmContent.tmlx=='填空题'" contenteditable="true" v-html="tmContent.Da" @input="editing('Da',$event)"></div>
+
+						<div class="row whiteBg" v-if="tmContent.tmlx=='单项选择题'">
+							<label class="xx" for="xxA">A：</label><input type="radio" name="radio" id="xxA" class="myRadio" :checked="tmContent.Da=='A'" @change="editing('Da',$event)" />
+							<label class="xx" for="xxB">B：</label><input type="radio" name="radio" id="xxB" class="myRadio" :checked="tmContent.Da=='B'" @change="editing('Da',$event)" />
+							<label class="xx" for="xxC">C：</label><input type="radio" name="radio" id="xxC" class="myRadio" :checked="tmContent.Da=='C'" @change="editing('Da',$event)" />
+							<label class="xx" for="xxD">D：</label><input type="radio" name="radio" id="xxD" class="myRadio" :checked="tmContent.Da=='D'" @change="editing('Da',$event)" />
+						</div>
+						<div class="row whiteBg" v-if="tmContent.tmlx=='多项选择题'">
+							<label class="xx" for="xxA">A：</label><input type="checkbox" id="xxAA" class="myRadio" :checked="tmContent.Da.indexOf('A')>=0" @change="editing('Da',$event)" />
+							<label class="xx" for="xxB">B：</label><input type="checkbox" id="xxBB" class="myRadio" :checked="tmContent.Da.indexOf('B')>=0" @change="editing('Da',$event)" />
+							<label class="xx" for="xxC">C：</label><input type="checkbox" id="xxCC" class="myRadio" :checked="tmContent.Da.indexOf('C')>=0" @change="editing('Da',$event)" />
+							<label class="xx" for="xxD">D：</label><input type="checkbox" id="xxDD" class="myRadio" :checked="tmContent.Da.indexOf('D')>=0" @change="editing('Da',$event)" />
+						</div>
+						<div class="row whiteBg" v-if="tmContent.tmlx=='判断题'">
+							<label class="xx" for="xx×">×</label><input type="radio" name="radio" id="xx×" class="myRadio" :checked="tmContent.Da=='×'" @change="editing('Da',$event)" />
+							<label class="xx" for="xx√">√</label><input type="radio" name="radio" id="xx√" class="myRadio" :checked="tmContent.Da=='√'" @change="editing('Da',$event)" />
+						</div>
+
+					</div>
+					<div class="vLine"></div>
+					<div class="foot">
+						<button type="button" name="" id="" class="btn1" :disabled="!edited" @click="saveTm()">保存</button>
+					</div>
+				</div>
+			</div>
+
+			<center>
+
+				<!-- 图片上传表单 -->
+				<form>
+					<input type="file" id="file-hook" @change='PreviewImage($event)' style="display: none" />
+				</form>
+
+			</center>
+
+		</div>
+
+		<script src="../../../data/vue.js"></script>
+		<script src="../../../data/jquery-1.11.2.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$.getJSON("../../../data/data.json", function(result, status) {
+					var vm = new Vue({
+						el: '#app',
+						data: {
+							tkInfo: result,
+							currentTMLX: 0,
+							currentTM: 0,
+							tmContent: {},
+							editTmContent: {},
+							edited: false,
+							currentEditor: ""
+						},
+						mounted: function() {
+							//this.getInfo()
+							this.getTmContent()
+						},
+						methods: {
+							PreviewImage: function(e) {
+								imgFile = e.target.files[0]
+								var pattern = /(\.*.jpg$)|(\.*.png$)|(\.*.jpeg$)|(\.*.gif$)|(\.*.bmp$)/;
+								if(!pattern.test(e.target.value)) {
+									alert("请上传jpg/jpeg/png/gif/bmp格式的照片！");
+								} else {
+									var fileReader, imgData;
+									fileReader = new FileReader();
+									fileReader.readAsDataURL(imgFile);
+									fileReader.onload = function() {
+										imgData = this.result; //base64数据
+										document.execCommand("insertImage", true, imgData);
+										//ele.innerHTML = "<img src='" + imgData + "' width='" + width + "' height='" + height + "'/>"; //渲染图片
+									}
+									this.edited = true
+								}
+								e.target.value = "";
+							},
+							uploadClick: function() {
+								document.getElementById("file-hook").click()
+							},
+							noBlur: function(e) {
+								window.event.returnValue = false;
+							},
+							execCommand: function(com) {
+								document.execCommand(com, false, null);
+								this.edited = true
+							},
+							getTmContent: function() {
+								var tmID = this.tkInfo.ml[this.currentTMLX].tm[this.currentTM]
+								_this = this
+								this.tkInfo.tms.forEach(function(e) {
+									if(e.id == tmID) {
+										_this.tmContent = JSON.parse(JSON.stringify(e));
+										_this.editTmContent = JSON.parse(JSON.stringify(e));
+									}
+								})
+								this.edited = false
+							},
+							deleteTm: function() {
+								if(confirm("你确定要删除该题吗？")) {
+									var tmID = this.tkInfo.ml[this.currentTMLX].tm[this.currentTM]
+									for(var i = 0; i < this.tkInfo.ml[this.currentTMLX].tm.length; i++) {
+										if(this.tkInfo.ml[this.currentTMLX].tm[i] == tmID) {
+											this.tkInfo.ml[this.currentTMLX].tm.splice(i, 1)
+											break;
+										}
+									}
+									this.getTmContent()
+								}
+							},
+							addTm: function() {
+								if(!this.testEdited()) {
+									var tmID = this.tkInfo.ml[this.currentTMLX].tm[this.currentTM]
+									for(var p in this.tmContent) {
+										this.tmContent[p] = ""
+									}
+									this.tmContent.id = Date.now()
+									this.tmContent.tmlx = this.tkInfo.TMLXSetting[this.currentTMLX].Name
+									this.editTmContent = JSON.parse(JSON.stringify(this.tmContent));
+									if(this.tkInfo.ml[this.currentTMLX].tm.length == 0) {
+										this.tkInfo.ml[this.currentTMLX].tm.push(this.tmContent.id)
+									} else {
+										for(var i = 0; i < this.tkInfo.ml[this.currentTMLX].tm.length; i++) {
+											if(this.tkInfo.ml[this.currentTMLX].tm[i] == tmID) {
+												this.tkInfo.ml[this.currentTMLX].tm.splice(i, 0, this.tmContent.id)
+												break;
+											}
+										}
+									}
+									this.tkInfo.tms.push(this.tmContent)
+									this.edited = true
+								}
+							},
+							changeTNLX: function(n) {
+								if(!this.testEdited()) {
+									this.currentTMLX = n
+									this.currentTM = 0
+									this.getTmContent()
+								}
+							},
+							testEdited: function() {
+								if(this.edited) {
+									alert("当前题目还未保存，请先进行保存操作。")
+								}
+								return this.edited
+							},
+							changeTM: function(n) {
+								if(!this.testEdited()) {
+									this.currentTM = n
+									this.getTmContent()
+								}
+							},
+							editing: function(msg, event) {
+								if(msg == "Da") {
+									id = event.target.id
+									switch(id) {
+										case "xxA":
+										case "xxB":
+										case "xxC":
+										case "xxD":
+										case "xx√":
+										case "xx×":
+											da = id.substr(2, 1)
+											this.editTmContent[msg] = da
+											this.tmContent[msg] = da
+											break;
+										case "xxAA":
+										case "xxBB":
+										case "xxCC":
+										case "xxDD":
+											da = this.editTmContent[msg]
+											str = id.substr(2, 1)
+											index = da.indexOf(str)
+											if(index >= 0) {
+												da = da.substring(0, index) + da.substr(index + 1)
+											} else {
+												for(var i = 0; i < da.length; i++) {
+													if(da.charAt(i) > str) {
+														da = da.substring(0, i) + str + da.substr(i)
+														break;
+													}
+												}
+												if(i == da.length) {
+													da = da + str
+												}
+											}
+											this.editTmContent[msg] = da
+											this.tmContent[msg] = da
+											break;
+										default:
+											this.editTmContent[msg] = event.target.innerHTML
+											break;
+									}
+								} else {
+									this.editTmContent[msg] = event.target.innerHTML
+								}
+								this.edited = true
+							},
+							saveTm: function() {
+								this.edited = false
+								for(var i = 0; i < this.tkInfo.tms.length; i++) {
+									if(this.tkInfo.tms[i].id == _this.tmContent.id) {
+										this.tkInfo.tms[i] = this.editTmContent;
+									}
+								}
+								this.saveFile()
+							},
+							saveFile: function() {
+								var fs = require("fs");
+								var fileName = "data/data.json"; //文件名称
+								fs.writeFile(fileName, JSON.stringify(this.tkInfo), function(err) {
+									console.log("文本创建成功");
+								});
+
+							}
+						}
+					})
+				});
+			});
+		</script>
+	</body>
+
+</html>

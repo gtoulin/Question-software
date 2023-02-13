@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../../data/my.css">
+	</head>
+
+	<body>
+		<div class="ourterDiv" id="app">
+			<div class="head">
+				生成试卷
+			</div>
+			<div class="vLine"></div>
+			<div class="main">
+				<div class="row">
+					<div class="no1">
+						&nbsp;
+					</div>
+					<div class="no2 title">
+						&nbsp;&nbsp;&nbsp;题数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每道题分数
+					</div>
+					<div class="no3 title">
+						<div>合计</div>
+					</div>
+				</div>
+
+				<div class="row" v-for="(item,index) in tkInfo.TMLXSetting">
+					<div class="no1">{{item.Name}}</div>
+					<div class="no2">
+						<input class="numInput" type="number" id="" v-model="item.Sl" v-on:input="change" />&nbsp;&nbsp;×&nbsp;&nbsp;<input class="numInput" type="number" v-model="item.Fs" v-on:input="change" />
+					</div>
+					<div class="no3">
+						<div>{{item.Sl*item.Fs}}</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="vLine"></div>
+			<div class="foot">
+				<div style="margin-left: 550px;">总分：{{zf}}</div>
+				<button type="button" name="" id="" class="btn1" v-bind:disabled="zf!=100" @click="create">生成试卷</button>
+				<div v-if="zf!=100" class="msg">总分必须为100</div>
+			</div>
+		</div>
+		<script src="../../../data/jquery-1.11.2.min.js"></script>
+		<script src="../../../data/vue.js"></script>
+		<script>
+			$(document).ready(function() {
+				$.getJSON("../../../data/data.json", function(result, status) {
+					var vm = new Vue({
+						el: '#app',
+						data: {
+							tkInfo: result,
+							zf: 100
+						},
+						mounted: function() {},
+						methods: {
+							change: function() {
+								_this = this
+								_this.zf = 0
+								this.tkInfo.TMLXSetting.forEach(function(e) {
+									_this.zf = _this.zf + e.Sl * e.Fs
+								})
+							},
+							create: function() {
+								var ml = this.tkInfo.ml
+								var TMLXSetting = this.tkInfo.TMLXSetting
+								TMLXSetting.forEach(function(e1) {
+									var tm=[]
+									ml.forEach(function(e2) {
+										if(e2.title.indexOf(e1.Name) >= 0) {
+											for(var i=0; i< e1.Sl;i++) {
+												var index = Math.floor(Math.random() * e2.tm.length)
+												var mm=e2.tm.splice(index, 1)
+												tm.push(mm[0])
+											}
+										}
+									})
+									e1.tm=tm
+								})
+								localStorage.setItem("sijuan",JSON.stringify(TMLXSetting))
+								window.open("sj.html");
+							}
+						}
+					})
+				});
+			});
+		</script>
+	</body>
+
+</html>

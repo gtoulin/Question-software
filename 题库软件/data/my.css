@@ -1,0 +1,262 @@
+body {
+	background-color: #FEFBE4;
+	margin: 0px;
+}
+
+.ourterDiv {
+	width: 1250px;
+	height: 600px;
+}
+
+.head {
+	text-align: center;
+	font-family: "微软雅黑";
+	font-weight: 900;
+	font-size: 24px;
+	margin: 15px;
+	color: #80501c;
+}
+
+.vLine {
+	height: 1px;
+	width: 100%;
+	background-color: #f9f1b4;
+}
+
+.row {
+	display: flex;
+	width: 100%;
+	font-family: "微软雅黑";
+	font-size: 22px;
+	color: #80501c;
+	margin: 0px;
+	line-height: 35px;
+}
+
+.no1 {
+	width: 33%;
+	text-align: right;
+	padding: 10px 40px;
+}
+
+.no2 {
+	width: 33%;
+	text-align: center;
+	border-left: 1px solid #f9f1b4;
+	border-right: 1px solid #f9f1b4;
+	padding: 10px 20px;
+}
+
+.no3 {
+	width: 33%;
+	padding: 10px 40px;
+}
+
+.no3 div {
+	width: 50px;
+	text-align: center;
+}
+
+.title {
+	font-weight: 900;
+	color: #f4a004;
+}
+
+.numInput {
+	width: 120px;
+	height: 35px;
+	font-family: "微软雅黑";
+	font-size: 20px;
+	font-weight: 900;
+	text-align: center;
+	color: darkred;
+}
+
+.foot {
+	font-family: "微软雅黑";
+	font-size: 22px;
+	color: #80501c;
+	text-align: center;
+	margin: 10px;
+}
+
+.btn1 {
+	font-family: "微软雅黑";
+	font-size: 20px;
+	font-weight: 900;
+	background-color: #f4a004;
+	border: 3px solid #ffd119;
+	padding: 5px;
+	color: white;
+	border-radius: 10px;
+	margin: 0px 15px;
+	padding: 5px 20px;
+}
+
+.btn1:hover {
+	background-color: white;
+	border: 3px solid #80501c;
+	color: #80501c;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.btn1:disabled {
+	background-color: lightgrey;
+	color: darkgrey;
+	border-color: darkgrey;
+}
+
+.main {
+	height: 425px;
+	overflow: auto;
+}
+
+.msg {
+	color: red;
+	font-size: 14px;
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+.left {
+	width: 250px;
+}
+
+.right {
+	width: 1000px;
+	border-left: 1px solid #ffed6c;
+}
+
+.mei {
+	background-color: #ffed6c;
+	border-left: 1px solid #80501c;
+}
+
+.content {
+	height: 465px;
+	overflow: auto;
+	padding: 10px 20px;
+}
+
+.tmk {
+	background-color: white;
+	width: 190px;
+	border: 5px solid #f4f0d5;
+	padding-bottom: 5px;
+}
+
+.item {
+	display: inline-block;
+	font-size: 16px;
+	width: 30px;
+	height: 30px;
+	border: 1px solid #80501c;
+	line-height: 30px;
+	text-align: center;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-left: 5px;
+}
+
+.item:hover {
+	background-color: #f4a004;
+	color: white;
+}
+
+.select {
+	background-color: #f4a004;
+	border: 1px solid #f4a004;
+	color: white;
+}
+
+.tools {
+	margin-left: 20px;
+	height: 40px;
+}
+
+.toolBtn {
+	font-family: "times new roman";
+	width: 25px;
+	height: 25px;
+	background-color: rgba(0, 0, 0, 0);
+	border-radius: 5px;
+	font-size: 16px;
+	border: 0px;
+	cursor: pointer;
+	vertical-align: middle;
+	padding: 0px;
+	font-weight: 900;
+}
+
+.toolBtn:hover {
+	background-color: white;
+}
+
+.btnBar {
+	background-color: white;
+	height: 40px;
+	margin: 20px;
+	border: 1px solid grey;
+}
+
+.whiteBg {
+	background-color: white;
+	width: 100%;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+}
+
+.xx {
+	width: 50px;
+	height: 30px;
+	text-align: right;
+	font-weight: 900;
+	color: #f4a004;
+	margin: 5px;
+}
+
+.xxInput {
+	width: 100%;
+	margin: 5px;
+}
+
+.myRadio {
+	height: 40px;
+}
+
+.button {
+	display: inline-block;
+	line-height: 38px;
+	padding: 0px 20px;
+	cursor: pointer;
+	border: 1px solid white;
+}
+
+.button:hover {
+	background-color: #f4a004;
+	color: white;
+}
+
+.test-textarea {
+	min-height: 26px;
+	line-height: 20px;
+	_height: 30px;
+	/* max-height: 150px;*/
+	margin-left: auto;
+	margin-right: auto;
+	padding: 3px;
+	outline: 0;
+	border: 1px solid #ccc;
+	font-size: 16px;
+	word-wrap: break-word;
+	overflow-x: hidden;
+	overflow-y: auto;
+	/*-webkit-user-modify: read-write-plaintext-only;*/
+	border-radius: 4px;
+	margin: 5px;
+}
+.test-textarea p{
+	margin: 0px;
+}

@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>试卷</title>
+	</head>
+	<style>
+		.head {
+			color: #000000;
+			margin-top: 20px;
+			text-align: center;
+			font-weight: 900;
+			font-family: "微软雅黑";
+		}
+		
+		.head div {
+			margin: 20px;
+		}
+		
+		.vLine {
+			background-color: #000000;
+		}
+		
+		.title {
+			font-weight: 900;
+			color: #000000;
+		}
+		
+
+		
+		.orange {
+			background-color: orange;
+		}
+		
+		p {
+			margin: 5px;
+		}
+		button{
+			margin: 5px;
+		}
+		@media print {
+			.noprint {
+				display: none;
+			}
+		}
+	</style>
+
+	<body>
+		<div id="app">
+			<div class="noprint" style="position:fixed;top: 0px;background-color: dodgerblue;width:100%;padding: 10px;">
+				<div style="width: 800px;">
+
+					<button @click="active(1)" :class="{ orange: isDa }">试卷</button>
+					<button @click="active(0)" :class="{ orange: !isDa }">答案</button><a href="http://www.ucas.edu.cn" target="_blank"  style="text-decoration:none;color:#006bd4">&nbsp&nbsp&nbsp中国科学院大学</a><h5 style="display:inline;color:#a9d5ff">&nbsp&nbsp&nbsp命题人：揭凯</h2> 
+					<button @click="print" style="float: right;">打印</button>
+					<button @click="toWord" style="float: right;">生成Word试卷</button>
+				</div>
+			</div>
+			<div style="margin-top: 100px;width:800px;" id='content'>
+				<style>
+					.head {
+						color: #000000;
+						margin-top: 20px;
+						text-align: center;
+						font-weight: 900;
+						font-family: "微软雅黑";
+					}
+					
+					.head div {
+						margin: 20px;
+					}
+					
+					.vLine {
+						background-color: #000000;
+					}
+					
+					.title {
+						font-weight: 900;
+						color: #000000;
+					}
+					
+
+					
+					.orange {
+						background-color: orange;
+					}
+					
+					p {
+						margin: 5px;
+					}
+					
+					@media print {
+						.noprint {
+							display: none;
+						}
+					}
+				</style>
+				<h2 class="head">
+					《{{tkInfo.mainSetting.bookName}}》试卷
+				</h2>
+				<h3 class="head">班级：________________　　　　姓名：________________ 　　　　命题人：__揭凯___</h3>
+				<hr>
+				<div v-for="(item,index) in sijuan" style="margin-left:20px ;">
+					<h4 style="margin-top: 50px;">
+						<span class="title">
+				{{"一二三四五六七八九十".substr(index,1)}}、{{item.Name}}</span> (共{{item.Sl}}题，每题{{item.Fs}}分。)</h4>
+					<div v-for="(item2,index2) in item.tm" style="margin-left:20px ;">
+						<div v-if="isDa">
+							<div style="width:100%;text-indent: -36px;padding-left: 50px;font-size: 18px;">
+								<span>{{index2+1}}．</span><span v-html="item2.Tg.replace(/（）/,'（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）').replace('　　','').replace(/\<p\>/g,'').replace(/\<\/p\>/g,'<p>')" class="tg"></span>
+							</div>
+
+							<div v-if="item2.tmlx=='单项选择题'||item2.tmlx=='多项选择题'" style="margin-left:30px ;font-size: 16px;">
+								<div v-html="item2.xxA"></div>
+								<div v-html="item2.xxB"></div>
+								<div v-html="item2.xxC"></div>
+								<div v-html="item2.xxD"></div><br>
+							</div>
+							<div v-if="item2.tmlx=='问答题'" style="height:100px;">
+							</div>
+							<div v-if="item2.tmlx=='案例分析题'" style="height:300px;">
+							</div>
+						</div>
+						<div v-else="">
+							{{index2+1}}．{{item2.Da}}<span v-if="item2.tmlx=='问答题'||item2.tmlx=='案例分析题'||item2.tmlx=='上机题'">略</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../../data/jquery-1.11.2.min.js"></script>
+		<script src="../../../data/vue.js"></script>
+		<script>
+			$(document).ready(function() {
+				$.getJSON("../../../data/data.json", function(result, status) {
+					var vm = new Vue({
+						el: '#app',
+						data: {
+							tkInfo: result,
+							sijuan: [],
+							isDa: 1
+						},
+						mounted: function() {
+							var sijuan = JSON.parse(localStorage.getItem("sijuan"))
+							for(var i = 0; i < sijuan.length; i++) {
+								for(var j = 0; j < sijuan[i].tm.length; j++) {
+									for(var k = 0; k < this.tkInfo.tms.length; k++) {
+										if(this.tkInfo.tms[k].id == sijuan[i].tm[j]) {
+											sijuan[i].tm[j] = this.tkInfo.tms[k]
+										}
+									}
+								}
+							}
+							this.sijuan = sijuan
+						},
+						methods: {
+							print: function() {
+								window.print()
+							},
+							toWord: function() {
+								//window.print()
+								var clip = nw.Clipboard.get();
+								clip.set([{
+									type: 'html',
+									data: document.getElementById("content").innerHTML
+								}]);
+
+								require('nw.gui').Shell.openItem(require('path').dirname(process.execPath) + '\\data\\my.vbs');
+								alert("正在生成Word试卷，请稍候。")
+							},
+							active: function(flag) {
+								this.isDa = flag
+							}
+						}
+					})
+				});
+			});
+		</script>
+	</body>
+
+</html>

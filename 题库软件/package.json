@@ -1,0 +1,40 @@
+﻿{
+
+  "main": "main/index.html",
+
+  "name": "dx_2019080501",
+
+  "description": "demo app of node-webkit",
+
+  "version": "0.1.0",
+
+  "keywords": [ "demo", "node-webkit" ],
+
+  "window": {
+
+    "title": "中国科学院大学XX学科 揭凯",
+
+    "icon": "data/logo.png",
+
+ "toolbar":false,
+
+    "frame": true,
+//"fullscreen":true,
+    "position": "mouse",
+
+ "width": 1285,
+    "height": 750,
+
+    "min_width": 1285,
+
+    "min_height": 750
+
+  },
+
+  "webkit": {
+
+    "plugin": true
+
+  }
+
+}
